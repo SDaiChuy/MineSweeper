@@ -1,0 +1,58 @@
+body{
+    background-color: #152238;
+    color: #ddd;
+    font-family: 'Courier';
+    display: grid;
+    align-content: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
+
+}
+
+h1{
+    font-size: 14pt;
+    font-weight: bold; 
+}
+
+h2{
+    font-size: 12pt;
+    font-weight: normal; ;   
+}
+
+#grid{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#grid tr td{
+    border: 1px solid #fff;
+    background-color: #999;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+}
+
+#grid tr td:hover{
+    background-color: #555;
+}
+
+#grid tr td.active{
+    background-color: #333;
+}
+
+#grid tr td.mine{
+    background-color: red;
+}
+
+#grid tr td.flag{
+    background-color: green;
+}
+
+button{
+    margin: 12px 0;
+    padding: 4px 0;
+    border: 1px solid black;
+    outline: none;
+    cursor: pointer;
+}
