@@ -10,11 +10,25 @@
 <body>
     <h1>Mine Sweeper</h1>
     <h2>Right Click to set a flag</h2>
+    <h2>Difficulty</h2>
+    <button onclick = "easy()">Easy</button>
+    <button onclick = "normal()">Normal</button>
+    <button onclick = "hard()">Hard</button>
     <table id="grid"></table>
-    <button onclick = "generateGrid();">Reset Game</button>
-    <button onclick = "revealMines();">Reveal Mines</button>
-    <button onclick = "hideMines();"> Hide Mines</button>
-    <p><a href="https://github.com/SDaiChuy">GitHub</a></p>
+    <button onclick = "generateGrid(diff);">Start/Reset Game</button>
+    <button onclick = "revealMines(diff);">Reveal Mines</button>
+    <button onclick = "hideMines(diff);"> Hide Mines</button>
+    <li class = "linkedin icon">
+        <span class="tooltip">
+            Linkedin
+            <span><i class = "fab fa-linkedin"></i></span>
+        </span>
+    </li>
+    <li class = "github icon">
+        <span class = "tooltip">
+            GitHub
+        </span><i class = "fab fa-github"></i></span>
+    </li>
     <script src = "script.js"></script>
 </body>
 </html>

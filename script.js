@@ -1,17 +1,56 @@
+// Backend code
+// Steven Dai Chuy
 const grid = document.getElementById("grid");
 let lockGame = false;
-//Set testMode to True if we want to see the mines
-const testMode = false;
-generateGrid();
+let diff = "easy";
+let diffSize = 9;
+
+generateGrid(diff);
+
+// 3 temp functions to get the diff from the HTML button
+// Still trying to figure out a concise way to do this
+function easy(){
+    diff = "easy";
+}
+
+function normal(){
+    diff = "normal";
+}
+
+function hard(){
+    diff = "hard";
+}
+// Generate the grid based on the difficulty
+function generateDiff(diff){
+    switch(diff){
+        case "easy":
+            generateGrid(diff);
+            break;
+        
+        case "normal":
+            generateGrid(diff);
+            break;
+        
+        case "hard":
+            generateGrid(diff);
+            break;
+    }
+}
 
 //Generate the grid
-function generateGrid(){
-    console.log("clicked");
+function generateGrid(diff){
     lockGame = false;
     grid.innerHTML = "";
-    for(var i = 0; i < 10; i++){
+    if(diff === "easy"){
+        diffSize == 9;
+    }
+    else if(diff === "normal"){
+        diffSize == 16;
+    }
+
+    for(var i = 0; i < diffSize; i++){
         row = grid.insertRow(i);
-        for(var j = 0; j < 10; j++){
+        for(var j = 0; j < diffSize; j++){
             cell = row.insertCell(j);
             cell.oncontextmenu = function() {
                 putFlag(this);
@@ -24,26 +63,38 @@ function generateGrid(){
             cell.setAttributeNode(mine);
         }
     }
-    generateMines();
+    generateMines(diff);
 }
 
-//Generate mines randonly
-function generateMines(){
-    for (var i = 0; i < 20; i++){
-        var row = Math.floor(Math.random() * 10);
-        var col = Math.floor(Math.random() * 10);
+// Generate mines randonly
+// Trying to find a way to set a number of mines 
+// depending on the level of difficulty
+function generateMines(diff){
+    if(diff === "easy"){
+        diffSize = 9;
+    }
+    else if(diff == "normal"){
+        diffSize = 16;
+    }
+    for (var i = 0; i < diffSize; i++){
+        var row = Math.floor(Math.random() * diffSize);
+        var col = Math.floor(Math.random() * diffSize);
         var cell = grid.rows[row].cells[col];
         cell.setAttribute("mine","true");
-        if(testMode){
-            cell.innerHTML = "X";
-        }
     }
 }
+    
 
-//Highlight all mines red
-function revealMines(){
-    for(var i = 0; i < 10; i++){
-        for(var j = 0; j < 10; j++){
+// Highlight all mines red
+function revealMines(diff){
+    if(diff === "easy"){
+        diffSize = 9;
+    }
+    else if(diff === "normal"){
+        diffSize = 16;
+    }
+    for(var i = 0; i < diffSize; i++){
+        for(var j = 0; j < diffSize; j++){
             var cell = grid.rows[i].cells[j];
             if(cell.getAttribute("mine") == "true"){
                 cell.innerHTML = "X";
@@ -53,35 +104,48 @@ function revealMines(){
     }
 }
 
-//Hide mines
-function hideMines(){
-    for(var i = 0; i < 10; i++){
-        for(var j = 0; j < 10; j++){
+// Hide mines
+function hideMines(diff){
+    if(diff === "easy"){
+        diffSize =9;
+    }
+    else if(diff === "normal"){
+        diffSize = 16;
+    }
+    for(var i = 0; i < diffSize; i++){
+        for(var j = 0; j < diffSize; j++){
             var cell = grid.rows[i].cells[j];
             if(cell.getAttribute("mine") == "true"){
+                cell.innerHTML = "";
                 cell.className = "cell";
             }
         }
     }
 }
 
-function checkGameComplete(){
+function checkGameComplete(diff){
     var gameComplete = true;
-    for(var i = 0; i < 10; i++){
-        for(var j = 0; j < 10; j++){
+    if(diff === "easy"){
+        diffSize = 9;
+    }
+    if(diff === "normal"){
+        diffSize = 16;
+    }
+    for(var i = 0; i < diffSize; i++){
+        for(var j = 0; j < diffSize; j++){
             if((grid.rows[i].cells[j].getAttribute("mine") == "false") && (grid.rows[i].cells[j].innerHTML == "")){
                 gameComplete = false;
             }
         }
     }
-    
     if(gameComplete){
-        alert("You Found All Mines");
-        revealMines();
+        alert("You Found All Mines!");
+        revealMines(diff);
     }
 }
 
-// right click function to add a flag (color is green)
+
+// Right click function to add a flag (color is green)
 function putFlag(cell){
     if(lockGame){
         return;
@@ -95,38 +159,47 @@ function putFlag(cell){
 
 }
 
+// Main code to run the game
 function init(cell){
     if(lockGame){
         return;
     }
+    switch(diff){
+        case "easy":
+            diffSize = 9;
+        
+        case "normal":
+            diffSize = 16;
+    }
+
+    if(cell.getAttribute("mine") == "true"){
+        alert("You hit a mine!");
+        revealMines(diff);
+        lockGame = true;
+    }
     else{
-        if(cell.getAttribute("mine") == "true"){
-            revealMines();
-            lockGame = true;
+        cell.className = "active";
+        var mineCount = 0;
+        var cellRow = cell.parentNode.rowIndex;
+        var cellCol = cell.cellIndex;
+        for(var i = Math.max(cellRow - 1, 0); i <= Math.min(cellRow + 1, (diffSize - 1)); i++){
+            for(var j = Math.max(cellCol - 1, 0); j <= Math.min(cellCol + 1, (diffSize - 1)); j++){
+                if(grid.rows[i].cells[j].getAttribute("mine") == "true"){
+                    mineCount++;
+                }
+            }
         }
-        else{
-            cell.className = "active";
-            var mineCount = 0;
-            var cellRow = cell.parentNode.rowIndex;
-            var cellCol = cell.cellIndex;
-            for(var i = Math.max(cellRow - 1, 0); i <= Math.min(cellRow + 1, 9); i++){
-                for(var j = Math.max(cellCol - 1, 0); j <= Math.min(cellCol + 1, 9); j++){
-                    if(grid.rows[i].cells[j].getAttribute("mine") == "true"){
-                        mineCount++;
+        cell.innerHTML = mineCount;
+        if(mineCount == 0){
+            for(var i = Math.max(cellRow - 1, 0); i <= Math.min(cellRow + 1, (diffSize - 1)); i++){
+                for(var j = Math.max(cellCol - 1, 0); j <= Math.min(cellCol + 1, (diffSize - 1)); j++){
+                    if(grid.rows[i].cells[j].innerHTML == ""){
+                        init(grid.rows[i].cells[j]);
                     }
                 }
             }
-            cell.innerHTML = mineCount;
-            if(mineCount == 0){
-                for(var i = Math.max(cellRow - 1, 0); i <= Math.min(cellRow + 1, 9); i++){
-                    for(var j = Math.max(cellCol - 1, 0); j <= Math.min(cellCol + 1, 9); j++){
-                        if(grid.rows[i].cells[j].innerHTML == ""){
-                            init(grid.rows[i].cells[j]);
-                        }
-                    }
-                }
-            }
-            checkGameComplete();
         }
+        checkGameComplete(diff);
     }
 }
+    
