@@ -107,7 +107,7 @@ function revealMines(diff){
 // Hide mines
 function hideMines(diff){
     if(diff === "easy"){
-        diffSize =9;
+        diffSize = 9;
     }
     else if(diff === "normal"){
         diffSize = 16;
